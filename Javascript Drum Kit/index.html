@@ -64,11 +64,11 @@
 
 
     const playSound = (e) => {
-      
-      if(e.type === 'keydown'){
-        const keyCode = e.keyCode;
-      }else if(e.type === 'click'){
- const keyCode = e.currentTarget.dataset.key;
+      let keyCode;
+      if (e.type === 'keydown') {
+        keyCode = e.keyCode;
+      } else if (e.type === 'click') {
+        keyCode = e.currentTarget.dataset.key;
       }
       const kbd = document.querySelector(`.key[data-key="${keyCode}"]`);
       const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
