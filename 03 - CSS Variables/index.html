@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+  <link rel="icon" href="https://fav.farm/👓" />
+  <style>
+    :root {
+  --base: #ffc600;
+  --spacing: 0px;
+  --blur: 10px;
+  --radius: 0%;
+}
+
+img {
+  padding: var(--spacing);
+  background: var(--base);
+  filter: blur(var(--blur));
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+}
+
+input[type="range"] {
+  appearance: none;
+  width: 150px;
+  background: #444;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  background: var(--base);
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 2px #000;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  background: var(--base);
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+/* Tooltip */
+input[type="range"]::after {
+  content: attr(data-value);
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--base);
+  color: black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Color Picker */
+input[type="color"] {
+  width: 50px;
+  height: 30px;
+  border: none;
+  padding: 0;
+  margin-left: 10px;
+  cursor: pointer;
+  background: none;
+}
+
+/* General UI */
+.hl {
+  color: var(--base);
+}
+
+body {
+  text-align: center;
+  background: #193549;
+  color: white;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: 100;
+  font-size: 40px;
+  margin: 0;
+  padding: 50px 20px;
+}
+
+.controls {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    font-size: 20px;
+    color: #ccc;
+    justify-content: space-evenly;
+}
+
+label {
+  margin-right: 10px;
+}
+
+  </style>
+</head>
+
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="0" max="200" value="0" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="radius">Radius:</label>
+    <input id="radius" type="range" name="radius" min="0" max="100" value="0" data-sizing="%">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+    <span id="base-value">#ffc600</span>
+  </div>
+
+  <img src="horizon.jpg" width="500px">
+
+
+
+  <script>
+    const controls = document.querySelectorAll('.controls input');
+    const colorTextContent = document.getElementById('base-value');
+    function changeProperty() {
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+      if(this.type !== 'color'){
+this.setAttribute('data-value', this.value + suffix);
+      }else{
+        colorTextContent.textContent = this.value;
+      }
+      this.setAttribute('data-value', this.value + suffix)
+    }
+    controls.forEach(input => {
+      input.addEventListener('change', changeProperty);
+      input.addEventListener('mousemove', changeProperty);
+    });
+
+  </script>
+
+</body>
+
+</html>
